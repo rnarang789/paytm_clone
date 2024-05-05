@@ -1,8 +1,15 @@
 "use client";
-import { updateBalance, useBalance } from "@repo/store/useBalance";
+
+import { Appbar } from "@repo/ui/appbar";
+import { Button } from "@repo/ui/button";
 
 export default function Page(): JSX.Element {
-  updateBalance(3);
-  const balance = useBalance();
-  return <div>HI THERE {balance}</div>;
+  return (
+    <div>
+      <Appbar onSignIn={undefined} onSignOut={undefined}></Appbar>
+    </div>
+    // <div className="flex mt-40 justify-center">
+    //   <Button onClick={() => {}}> login</Button>
+    // </div>
+  );
 }
