@@ -7,13 +7,18 @@ export const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        phone: { label: "Phone Number", type: "text", placeholder: "12345" },
-        password: { label: "Password", type: "password" },
+        phone: {
+          label: "Phone Number",
+          type: "text",
+          placeholder: "12345",
+          required: true,
+        },
+        password: { label: "Password", type: "password", required: true },
       },
       // TODO: User credentials type from next-auth
       async authorize(credentials: any) {
         //DO ZOD VALIDATION/OTP VALIDATION HERE
-        const hashedPass = await bcrypt.hash(credentials.password, "12");
+        const hashedPass = await bcrypt.hash(credentials.password, 10);
         const existingUser = await prisma.user.findFirst({
           where: {
             mobile_number: credentials.phone,
@@ -43,16 +48,29 @@ export const authOptions = {
             },
           });
 
+          // SEND OTP TO PHONE NUMBER
           return {
             id: user.id.toString(),
             name: user.name,
             email: user.mobile_number,
           };
         } catch (error) {
-          console.error(error);
           return null;
         }
       },
     }),
   ],
+  secret: process.env.JWT_SECRET,
+  callbacks: {
+    // TODO determine type
+    async session({ session, token }: any) {
+      if (session.user) {
+        session.user.id = token.sub;
+      }
+      return session;
+    },
+  },
+  pages: {
+    // can add custom signin page/ other pages
+  },
 };
