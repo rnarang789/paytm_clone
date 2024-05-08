@@ -31,10 +31,11 @@ model Merchant {
 }
 
 model Balances {
-  id     String @id @default(uuid())
-  userId String @unique
-  amount Int
-  User   User   @relation(fields: [userId], references: [id])
+  id           String @id @default(uuid())
+  userId       String @unique
+  amount       Int
+  lockedAmount Int
+  User         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model OnRampTransactions {
@@ -45,7 +46,7 @@ model OnRampTransactions {
   amount    Int
   startTime DateTime
   userId    String       @unique
-  User      User         @relation(fields: [userId], references: [id])
+  User      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum AuthType {

@@ -27,7 +27,7 @@ export const authOptions = {
 
         if (existingUser) {
           const passwordValidation = await bcrypt.compare(
-            hashedPass,
+            credentials.password,
             existingUser.password
           );
           if (passwordValidation) {
