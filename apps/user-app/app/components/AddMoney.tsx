@@ -4,6 +4,7 @@ import { Card } from "@repo/ui/card";
 import { Select } from "@repo/ui/select";
 import { TextInput } from "@repo/ui/textInput";
 import { useState } from "react";
+import createOnRampTransaction from "../lib/actions/createOnrampTransaction";
 
 const SUPPORTED_BANKS = [
   {
@@ -17,9 +18,15 @@ const SUPPORTED_BANKS = [
 ];
 
 export default function () {
-  const [redirectUrl, setRedirectUrl] = useState<string>(
-    SUPPORTED_BANKS[0]?.redirectUrl ?? ""
-  );
+  const [selectedBankDetails, setSelectedBankDetails] = useState<{
+    name: string;
+    redirectUrl: string;
+  }>({
+    name: SUPPORTED_BANKS[0]?.name ?? "",
+    redirectUrl: SUPPORTED_BANKS[0]?.redirectUrl ?? "",
+  });
+
+  const [amount, setAmount] = useState<number>(0);
   return (
     <Card title={"Add Money"}>
       <div className="w-full">
@@ -27,7 +34,7 @@ export default function () {
           placeholder={"Amount"}
           label={"Amount"}
           onChange={(value) => {
-            //TODO::: LOGIC TO BE ADDED
+            setAmount(Number(value));
           }}
         />
         <Select
@@ -36,16 +43,20 @@ export default function () {
             value: bank.name,
           }))}
           onSelect={(value) => {
-            setRedirectUrl(
-              SUPPORTED_BANKS.find((x) => x.name === value)?.redirectUrl || ""
-            );
+            setSelectedBankDetails({
+              name: SUPPORTED_BANKS.find((x) => x.name === value)?.name || "",
+              redirectUrl:
+                SUPPORTED_BANKS.find((x) => x.name === value)?.redirectUrl ||
+                "",
+            });
           }}
           label={"Bank"}
         ></Select>
         <div className=" flex justify-center pt-4">
           <Button
-            onClick={() => {
-              window.location.href = redirectUrl;
+            onClick={async () => {
+              await createOnRampTransaction(selectedBankDetails.name, amount);
+              window.location.href = selectedBankDetails.redirectUrl;
             }}
           >
             Add Money

@@ -3,6 +3,8 @@ import prisma from "@repo/db/client";
 
 const app = express();
 
+app.use(express.json());
+
 app.post("/hdfcWebhook", async (req, res) => {
   // zod validation
 
@@ -14,16 +16,18 @@ app.post("/hdfcWebhook", async (req, res) => {
       status: req.body.status,
     };
 
-    await prisma.balances.update({
-      where: {
-        userId: paymentInfo.userId,
-      },
-      data: {
-        amount: {
-          increment: paymentInfo.amount,
+    if (req.body.status === "Success") {
+      await prisma.balances.update({
+        where: {
+          userId: paymentInfo.userId,
         },
-      },
-    });
+        data: {
+          amount: {
+            increment: paymentInfo.amount,
+          },
+        },
+      });
+    }
 
     await prisma.onRampTransactions.update({
       where: {

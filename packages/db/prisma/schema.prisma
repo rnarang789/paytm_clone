@@ -45,7 +45,7 @@ model OnRampTransactions {
   provider  String
   amount    Int
   startTime DateTime
-  userId    String       @unique
+  userId    String
   User      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
