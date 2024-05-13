@@ -6,7 +6,9 @@ const app = express();
 app.use(express.json());
 
 app.post("/hdfcWebhook", async (req, res) => {
-  // zod validation
+  // TODO::: zod validation
+  // TODO::: BANK should ideally send us a secret so we know this is sent by them
+  // TODO::: need a check that run this only if onRampTransaction is processing
 
   try {
     const paymentInfo = {
@@ -42,6 +44,7 @@ app.post("/hdfcWebhook", async (req, res) => {
       message: "captured",
     });
   } catch (error) {
+    console.log(error);
     res.status(411).json({
       message: "Error while processing webhook",
     });

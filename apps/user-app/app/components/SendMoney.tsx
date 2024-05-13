@@ -4,6 +4,7 @@ import { Card } from "@repo/ui/card";
 import { Center } from "@repo/ui/center";
 import { TextInput } from "@repo/ui/textInput";
 import { useState } from "react";
+import sendMoney from "../lib/actions/p2pTransfer";
 
 export default function () {
   const [number, setNumber] = useState<string>("");
@@ -30,8 +31,9 @@ export default function () {
       </div>
       <Center>
         <Button
-          onClick={() => {
-            // TODO::
+          onClick={async () => {
+            const message = await sendMoney(amount * 100, number);
+            alert(message.message);
           }}
         >
           Send Money

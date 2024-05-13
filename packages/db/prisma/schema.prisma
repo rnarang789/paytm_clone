@@ -19,8 +19,10 @@ model User {
   name              String?
   password          String
   mobile_number     String               @unique
-  balance           Balances[]
+  balance           Balances?
   onRampTransaction OnRampTransactions[]
+  sentTransfers     p2pTransfers[]       @relation(name: "FromUserRelation")
+  receivedTransfers p2pTransfers[]       @relation(name: "ToUserRelation")
 }
 
 model Merchant {
@@ -47,6 +49,16 @@ model OnRampTransactions {
   startTime DateTime
   userId    String
   User      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model p2pTransfers {
+  id         String   @id @default(uuid())
+  amount     Int
+  timeStamp  DateTime
+  fromUserId String
+  fromUser   User     @relation(name: "FromUserRelation", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUserId   String
+  toUser     User     @relation(name: "ToUserRelation", fields: [toUserId], references: [id], onDelete: Cascade)
 }
 
 enum AuthType {

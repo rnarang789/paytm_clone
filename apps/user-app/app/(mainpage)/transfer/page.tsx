@@ -26,8 +26,18 @@ const getOnRampTransactions = async () => {
     amount: t.amount,
     status: t.status,
     provider: t.provider,
+    id: t.id,
   }));
 };
+
+// const getAllTransactions = async () => {
+//   const session = await getServerSession(authOptions);
+//   const transactions =
+//     await prisma.$queryRaw`SELECT "" FROM "OnRampTransactions" where "userId" = ${session.user.id} 
+//     UNION ALL 
+//     SELECT * FROM "p2pTransfers" where "fromUserId" = ${session.user.id} OR "toUserId" = ${session.user.id}
+//     Order`;
+// };
 
 export default async function () {
   const balance = await getBalance();

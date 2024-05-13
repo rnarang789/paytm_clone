@@ -9,6 +9,7 @@ export default function ({
     // TODO::: Maybe can convert status type to enum
     status: string;
     provider: string;
+    id: string;
   }[];
 }) {
   if (!transactions.length) {
@@ -23,7 +24,12 @@ export default function ({
     <Card title={"Recent Transactions"}>
       <div>
         {transactions.map((x) => (
-          <TransactionUi time={x.time} status={x.status} amount={x.amount} />
+          <TransactionUi
+            key={x.id}
+            time={x.time}
+            status={x.status}
+            amount={x.amount}
+          />
         ))}
       </div>
     </Card>

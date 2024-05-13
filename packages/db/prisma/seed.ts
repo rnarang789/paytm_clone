@@ -36,7 +36,7 @@ async function main() {
       name: "bob",
       balance: {
         create: {
-          amount: 2000,
+          amount: 0,
           lockedAmount: 0,
         },
       },
@@ -51,6 +51,7 @@ async function main() {
       },
     },
   });
+  console.log({ alice, bob });
 }
 main()
   .then(async () => {
